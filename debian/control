@@ -1,0 +1,17 @@
+Source: mytool
+Section: utils
+Priority: optional
+Maintainer: Team Name <team-email@example.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+
+Package: mytool
+Architecture: all
+Depends: ${misc:Depends}
+Description: Example Bash tool packaged into a .deb
+ This package contains a Bash-based command-line tool template.
+ Your team should replace the script in src/ with your own code.
+ .
+ CRITICAL: Change "mytool" to your actual project name throughout this file!
+ Update the Maintainer field with your team information.
+ Update the Description to describe what your tool actually does.

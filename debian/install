@@ -1,0 +1,3 @@
+src/mytool.sh usr/bin/
+config/mytool.conf etc/
+man/mytool.1 usr/share/man/man1/
