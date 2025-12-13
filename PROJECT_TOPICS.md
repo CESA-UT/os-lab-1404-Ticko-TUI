@@ -220,29 +220,31 @@ Periodically checks a list of URLs or IP:Port and alerts if unavailable.
 
 ---
 
-### 17. Project Structure Generator
-Automatically creates directory and file structure for various project types (e.g., web, Python, Bash).
+### 17. Log Rotation & Cleanup Manager
+A tool that periodically (using cron) checks system log files or a specified path, compresses or deletes old/large logs, and records operation reports.
 
-**Suggested Commands:** `mkdir -p`, `touch`
+**Suggested Commands:** `find`, `du`, `gzip`, `date`, `awk`, `cron`
 
 **Features to implement:**
-- Multiple project templates
-- Customizable structures
-- File initialization
-- Git integration
+- Scheduled log rotation
+- Size-based and age-based cleanup
+- Log compression before deletion
+- Operation logging
+- Configurable retention policies
 
 ---
 
-### 18. Command Scheduler (Lightweight)
-Executes commands with specified delay or at a specific future time (without cron dependency).
+### 18. Automated Backup Scheduler
+An automated backup tool that uses cron to back up a specified path, compresses it, and saves it to a standard system location.
 
-**Suggested Commands:** `sleep`, `at` (wrapper)
+**Suggested Commands:** `tar`, `rsync`, `find`, `date`, `cron`
 
 **Features to implement:**
-- Schedule commands for later
-- List scheduled tasks
-- Cancel scheduled tasks
-- Recurring task support
+- Automated scheduled backups
+- Incremental and full backup modes
+- Compression and storage management
+- Old backup cleanup
+- Backup verification
 
 ---
 
