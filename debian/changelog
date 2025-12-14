@@ -1,7 +1,5 @@
-mytool (1.0) unstable; urgency=medium
+Ticko (1.0) unstable; urgency=medium
 
   * Initial release.
-  * TODO: Your team should update this with your changes.
-  * IMPORTANT: Replace "mytool" with your actual project name!
 
- -- Team Name <team-email@example.com>  Thu, 12 Dec 2025 12:00:00 +0000
+ -- Ticko <ticko-project@example.com>  Sun Dec 14 15:29:34 +0330 2025
