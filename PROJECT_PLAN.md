@@ -230,16 +230,16 @@ generate_next_id
 
 ---
 
-### Task 3: MohammadHossein MaarefVand — CLI Interface + Help System
+### Task 3: MohammadHossein MaarefVand — CLI Interface + Help System ✓ COMPLETE
 
 **Files to Create/Edit:** `src/cli.sh`, `src/help.sh`, `src/utils.sh`
 
 #### Subtasks:
 
-1. **CLI Argument Parser** (`src/cli.sh`)
+1. **CLI Argument Parser** (`src/cli.sh`) ✓
 
-   - Parse command-line arguments using `getopts` or manual parsing
-   - Implement commands:
+   - [x] Parse command-line arguments using `getopts` or manual parsing
+   - [x] Implement commands:
 
      ```bash
      ticko                      # Launch TUI (default)
@@ -262,53 +262,66 @@ generate_next_id
      ticko edit ID -t "2026-01-15"     # Edit due date
      ```
 
-   - Return proper exit codes
-   - Validate arguments and show errors
+   - [x] Return proper exit codes
+   - [x] Validate arguments and show errors
+   - [x] ID validation helper function
 
-2. **Help System** (`src/help.sh`)
+2. **Help System** (`src/help.sh`) ✓
 
-   - Implement `show_cli_help` — Full CLI usage help
-   - Implement `show_version` — Version info
-   - Help text should be:
-     - Well-formatted with colors
-     - Show examples
-     - List all commands and options
+   - [x] Implement `show_cli_help` — Full CLI usage help
+   - [x] Implement `show_version` — Version info
+   - [x] Help text should be:
+     - [x] Well-formatted with colors
+     - [x] Show examples
+     - [x] List all commands and options
+   - [x] Bonus: `show_tui_help_overlay()` for reference
 
-3. **Utility Functions** (`src/utils.sh`)
-   - Color output functions:
+3. **Utility Functions** (`src/utils.sh`) ✓
+   - [x] Color output functions:
      ```bash
      print_error "message"
      print_success "message"
      print_warning "message"
      print_info "message"
      ```
-   - Date utilities:
+   - [x] Date utilities:
      ```bash
      format_date "$timestamp"
      parse_date "$datestring"
      validate_date "$datestring"
      ```
-   - String utilities:
+   - [x] String utilities:
      ```bash
      truncate_string "$str" "$maxlen"
      center_string "$str" "$width"
      ```
+   - [x] Smart color detection (disables colors for non-TTY)
 
 #### Interfaces to Provide:
 
 ```bash
-# cli.sh exports
+# cli.sh exports ✓ IMPLEMENTED
 parse_args "$@"              # Returns mode and parsed options
+run_cli_command              # Dispatch CLI command execution
 
-# help.sh exports
+# help.sh exports ✓ IMPLEMENTED
 show_cli_help
 show_version
+show_tui_help_overlay        # Bonus: For TUI reference
 
-# utils.sh exports
+# utils.sh exports ✓ IMPLEMENTED
 print_error, print_success, print_warning, print_info
-format_date, validate_date
+format_date, validate_date, parse_date
 truncate_string, center_string
 ```
+
+**Implementation Notes:**
+- All CLI commands fully functional with proper error handling
+- ID validation ensures only numeric IDs are accepted
+- Date validation uses both regex and `date` command
+- Exit codes properly set for all error conditions
+- Custom file path support via global `CUSTOM_FILE` variable
+- Smart color detection: colors disabled for non-TTY output
 
 ---
 
