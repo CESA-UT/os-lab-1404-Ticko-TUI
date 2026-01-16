@@ -162,7 +162,7 @@ _cmd_list() {
     IFS=$'\n' read -r -d '' -a ids < <(get_all_todo_ids && printf '\0')
 
     if (( ${#ids[@]} == 0 )); then
-        print_info "No TODOs yet. Clean life, huh 😌"
+        print_info "No TODOs yet. Clean life, huh :)"
         return
     fi
 
@@ -177,7 +177,7 @@ _cmd_list() {
         esac
 
         if [[ "$completed" == "1" ]]; then
-            echo -e "[$id] ✔ $title"
+            echo -e "[$id] ✓ $title"
         else
             echo -e "[$id] • $title"
         fi
