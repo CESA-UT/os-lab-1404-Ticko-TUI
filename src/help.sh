@@ -76,15 +76,14 @@ show_tui_help_overlay() {
 TUI HELP — Ticko Keybindings
 
 Navigation:
-  j / ↓            Move down
-  k / ↑            Move up
+  j                Move down
+  k                Move up
   g                Go to first item
   G                Go to last item
 
 Actions:
-  o                Add new item below
-  O                Add new item above
-  x                Toggle completion
+  a / o            Add new item
+  x / Space        Toggle completion
   D                Delete current item
   e                Edit description
   d                Set due date

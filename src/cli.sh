@@ -217,8 +217,9 @@ _cmd_add() {
         shift
     done
 
-    local id
-    id=$(add_todo "$title" "$desc" "$due")
+    local id=$NEXT_TODO_ID
+    (( NEXT_TODO_ID++ ))
+    add_todo "$id" "$title" "$desc" "$due"
     print_success "Added TODO with ID $id"
 }
 
