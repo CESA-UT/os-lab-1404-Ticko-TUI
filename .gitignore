@@ -4,9 +4,10 @@ debian/*.debhelper
 debian/*.debhelper.log
 debian/*.log
 debian/*.substvars
-debian/mytool/
+debian/ticko/
 debian/tmp/
 debian/.debhelper/
+debian/debhelper-build-stamp
 
 # Build outputs
 *.deb
@@ -35,4 +36,3 @@ Desktop.ini
 # Temporary files
 *.tmp
 .*.tmp
-debian/debhelper-build-stamp
