@@ -16,7 +16,7 @@ set -o pipefail  # Exit on pipe failure
 readonly VERSION="1.0.0"
 readonly APP_NAME="Ticko"
 readonly DEFAULT_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ticko/ticko.conf"
-readonly DEFAULT_DATA_PATH="${XDG_DATA_HOME:-$HOME/.local/share}/ticko/todos.txt"
+readonly DEFAULT_DATA_PATH="${XDG_DATA_HOME:-$HOME/.local/share}/ticko/todos.tik"
 
 ###########################################
 # Determine script directory
@@ -52,7 +52,7 @@ source "$SCRIPT_DIR/tui.sh"
 ###########################################
 main() {
     # Load configuration
-    load_config
+    load_config $DEFAULT_CONFIG_PATH
     
     # Parse command-line arguments
     parse_args "$@"

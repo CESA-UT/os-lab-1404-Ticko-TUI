@@ -717,7 +717,6 @@ _confirm_dialog() {
     local choice="${3:-Y}"
 
     if [[ "$choice" != "Y" && "$choice" != "N" ]]; then
-        read -p "Hello: $choice"
         choice="Y"
     fi
     
@@ -1144,7 +1143,7 @@ _action_search_prev() {
 
 _action_save() {
     if save_todos; then
-        _show_message "Saved successfully!" "success"
+        _show_message "Successfully saved to: $CURRENT_DATA_FILE" "success"
     else
         _show_message "Failed to save!" "error"
     fi

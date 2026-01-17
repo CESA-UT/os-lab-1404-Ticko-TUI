@@ -135,15 +135,13 @@ save_todos() {
 # Load configuration
 ###########################################
 load_config() {
-    local config_path="${XDG_CONFIG_HOME:-$HOME/.config}/ticko/ticko.conf"
-    
-    # Set defaults
-    ENABLE_COLORS=true
-    AUTO_SAVE=true
+    local config_path="$1"
     
     # Load config if exists
     if [[ -f "$config_path" ]]; then
         # shellcheck disable=SC1090
         source "$config_path" 2>/dev/null || true
+        CUSTOM_FILE="${DATA_PATH:-}"
+        CURRENT_DATA_FILE="${CUSTOM_FILE}"
     fi
 }
