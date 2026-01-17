@@ -252,6 +252,11 @@ _draw_status() {
     fi
     
     local msg_len=${#msg}
+    if (( msg_len > TERM_COLS - 2 )); then
+        local size=$(( (TERM_COLS - 3) / 2 ))
+        msg="${msg:0:size}…${msg:$(( ${#msg} - size )):size}"
+        msg_len=${#msg}
+    fi
     local pad=$(( TERM_COLS - 2 - msg_len ))
     
     echo -ne "${color}${msg}${C_RESET}"
