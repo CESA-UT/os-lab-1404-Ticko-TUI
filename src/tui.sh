@@ -648,6 +648,11 @@ _input_dialog() {
                     cursor=$(( cursor - 1 ))
                 fi
                 ;;
+            "DELETE")
+                if (( cursor >= 0 && cursor < ${#input} )); then
+                    input="${input:0:cursor}${input:cursor+1}"
+                fi
+                ;;
             "$KEY_LEFT")
                 if [[ "$cursor" -gt "0" ]]; then
                     cursor=$(( cursor - 1 ))
