@@ -1,189 +1,168 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/1Hm_uBaj)
-# MyTool — Bash Tool Debian Packaging Template
+Ticko - A TUI TODO List App
+===========================
 
-**[نسخه فارسی](README.fa.md) | English Version**
+Ticko is a terminal-based TODO and task management tool written in **Bash**. It provides
+both an interactive **Terminal User Interface (TUI)** and a
+**Command-Line Interface (CLI)**, allowing users to manage tasks efficiently from the
+terminal or automate workflows using scripts.
 
-**Operating System Lab - Final Project**  
-**First Semester 1404-1405 (2025-2026)**  
-**Due Date: January 9, 2026 (19 Dey 1404) - 23:59**
+Team Members
+------------
+- Mehrad Pooryoussof
+- Abolfazl Tavakolian
+- MohammadHossein MaarefVand
+- AmirHossein Nasrollahi
 
-This repository is a template for your team to create a Bash command-line tool and package it into a `.deb` package.
+Features
+--------
 
-## 📋 Project Topics
+- Add, edit, remove, and mark TODO items as completed or pending
+- TUI mode for interactive management
+- CLI mode for scripting and automation
+- Customizable configuration and data file locations
+- Search and navigation within TUI
+- Cross-platform and lightweight
 
-Before you start, **choose one topic** from the list of 21 available projects:
+Installation
+------------
 
-**[View All Project Topics](PROJECT_TOPICS.md)** | **[مشاهده موضوعات پروژه](PROJECT_TOPICS.fa.md)**
+1. Download the latest `.deb` package from the GitHub releases page:
 
-Each topic has specific requirements and suggested commands. Make sure to coordinate with other teams to avoid duplicates.
+   ```bash
+   https://github.com/CESA-UT/os-lab-1404-Ticko-TUI/releases
+   ```
 
-## ⚠️ FIRST STEP: Rename Your Project!
+2. Install the package using `dpkg`:
 
-**`mytool` is just a placeholder name!** Your team should:
+   ```bash
+   sudo dpkg -i ticko_1.0_all.deb
+   ```
 
-1. **Choose a meaningful name** that represents your project topic
-2. **Rename all files:**
-   - `src/mytool.sh` → `src/yourproject.sh`
-   - `man/mytool.1` → `man/yourproject.1`
-   - `config/mytool.conf` → `config/yourproject.conf`
-3. **Update `debian/control`** (Source and Package fields)
-4. **Update `debian/changelog`** (package name)
-5. **Update `debian/install`** (all file paths)
-6. **Update `debian/manpages`** (man page path)
-7. **Update `debian/links`** (all file paths)
+3. Once installed, you can run Ticko from the terminal:
 
-**Examples of good names:** `diskmonitor`, `loganalyzer`, `fileorganizer`, `sysbackup`, `netcheck`
+   ```bash
+   ticko
+   ```
 
----
+Usage
+-----
 
-## 🧩 Where to put your team's code
+### TUI Mode
 
-- Write your Bash program in **src/mytool.sh** (after renaming it!)
-- Update the man page in **man/mytool.1**
-- Update configuration in **config/mytool.conf** (optional)
-
----
-
-## 🛠 Building the .deb Package
-
-### 1. Install required tools (on Ubuntu/Debian)
-
-```bash
-sudo apt-get update
-sudo apt-get install -y devscripts debhelper build-essential
-```
-
-### 2. Build the package
-
-From the project root directory:
+Run `ticko` without arguments to start the interactive TUI:
 
 ```bash
-debuild -us -uc
+ticko
 ```
 
-If successful, the `.deb` file appears in the **parent directory**:
+**TUI Key Bindings**
+
+**Navigation**
+
+* `j` / Down: Move down
+* `k` / Up: Move up
+* `g` / Home: Go to first item
+* `G` / End: Go to last item
+* PageUp / PageDown: Scroll by one page
+* `H` / `L`: Go to first/last visible item
+
+**Actions**
+
+* `a` / `o`: Add a new TODO
+* `x` / Space: Toggle completion
+* `D`: Delete selected TODO
+* `e`: Edit description
+* `d`: Set/edit due date
+* `t`: Edit title
+
+**Search**
+
+* `/`: Start search
+* `n`: Next search result
+* `N`: Previous search result
+
+**General**
+
+* `s`: Save changes
+* `r`: Refresh
+* `Enter`: Confirm action
+* `Escape`: Cancel/close
+* `?`: Show help
+* `q`: Quit
+
+### CLI Mode
+
+Run `ticko` with commands and arguments:
 
 ```bash
-ls ../*.deb
-# Example output: ../mytool_1.0-1_all.deb
+ticko list                   # List all TODO items
+ticko list --completed       # List completed items
+ticko list --pending         # List pending items
+
+ticko add "Title"            # Add new TODO
+ticko add "Title" -d "Desc"  # Add with description
+ticko add "Title" -t "YYYY-MM-DD HH:MM"  # Add with due date
+
+ticko done ID                # Mark TODO as done
+ticko undone ID              # Mark TODO as not done
+ticko remove ID              # Remove TODO
+
+ticko edit ID                # Edit TODO
+ticko edit ID -d "Desc"      # Edit description
+ticko edit ID -t "YYYY-MM-DD HH:MM"  # Edit due date
 ```
 
-### 3. Install and test your package
+## Configuration
 
-```bash
-# Install the package
-sudo dpkg -i ../*.deb
+Ticko supports system-wide and user-specific configuration files:
 
-# Test your tool
-mytool  # (or whatever you renamed it to!)
+* System-wide: `/etc/ticko.conf`
+* User-specific: `~/.config/ticko/ticko.conf`
 
-# Check installed files
-dpkg -L mytool
+The environment variable `XDG_CONFIG_HOME` can override the default config directory.
 
-# View the man page
-man mytool
+## Screenshots
 
-# Uninstall when done testing
-sudo apt remove mytool
-```
+**TUI Interface**
+![TUI](screenshots/1.TUI.png)
 
----
+**Editing Description**
+![Editing Description](screenshots/2.Editing-description.png)
 
-## 📝 Customizing your tool
+**Confirming Delete**
+![Confirming Delete](screenshots/3.Confirming-Delete.png)
 
-**STEP 1: Rename everything from `mytool` to your project name!**
+**Searching in TUI**
+![CLI Listing](screenshots/5.Searching.png)
 
-- Rename all source files, man pages, and config files
-- Update `debian/control`, `debian/changelog`, `debian/install`, `debian/links`, and `debian/manpages`
-- Change file paths in `debian/install` to match your renamed files
-- Change file paths in `debian/links` to match your renamed files
-- Update metadata in `debian/control` with your team information
-- Update version info in `debian/changelog` when your team submits new versions
-- Coordinate with team members to avoid merge conflicts!
+**Listing in CLI**
+![CLI Listing](screenshots/5.Listing-in-CLI.png)
 
----
+## License
 
-## 📦 What this template gives you
-
-- A valid Debian packaging structure (`debian/` directory)
-- Example code, config, and documentation
-- Automatic installation of:
-  - `/usr/bin/mytool` (your executable)
-  - `/etc/mytool.conf` (configuration file)
-  - Man page in `/usr/share/man/man1/mytool.1.gz`
-
----
-
-## 📚 Documentation
-
-- **[Publishing Guide](PUBLISHING_GUIDE.md)** - How to publish your package to GitHub Releases ([فارسی](PUBLISHING_GUIDE.fa.md))
-- **[Debian Packaging Guide](DEBIAN_PACKAGING.md)** - Debian packaging instructions ([فارسی](DEBIAN_PACKAGING.fa.md))
-
----
-
-## 🎯 File Structure
+Ticko is released under the **MIT License**.
 
 ```
-my-bash-tool/
-├── src/
-│   └── mytool.sh              # Your main script (rename me!)
-├── man/
-│   └── mytool.1               # Man page documentation (rename me!)
-├── config/
-│   └── mytool.conf            # Configuration file (rename me!)
-├── debian/
-│   ├── changelog              # Version history (update me!)
-│   ├── control                # Package metadata (update me!)
-│   ├── install                # File installation mappings (update me!)
-│   ├── links                  # File link mappings (update me!)
-│   ├── manpages               # Man page registration (update me!)
-│   └── rules                  # Build rules (usually no changes needed)
-├── .gitignore                 # Excludes build artifacts
-├── DEBIAN_PACKAGING.md        # Debian packaging guide (English)
-├── DEBIAN_PACKAGING.fa.md     # Debian packaging guide (Persian)
-├── README.md                  # This file (English)
-├── README.fa.md               # Persian version
-├── PUBLISHING_GUIDE.md        # Publishing instructions (English)
-└── PUBLISHING_GUIDE.fa.md     # Publishing instructions (Persian)
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including the rights to use, copy, modify,
+merge, publish, distribute, sublicense, and/or sell copies of the Software, and
+to permit persons to whom the Software is furnished to do so, subject to the
+following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
 
----
+## References
 
-## ⚠️ Important Reminders
-
-1. **Rename everything** - Don't leave any "mytool" references in your final submission!
-2. **Test thoroughly** - Install and test your package before publishing
-3. **Coordinate with your team** - Use git branches to avoid conflicts
-4. **Update all debian files** - Make sure all metadata reflects your actual project
-5. **Follow naming rules** - Only lowercase letters (a-z), numbers (0-9), and hyphens (-)
-
----
-
-## 📊 Grading Information
-
-**Base Score:** 4 points  
-**Maximum Score:** 6 points (with bonus features)
-
-**Required Deliverables:**
-1. Complete source code in `src/`
-2. Man page in `man/`
-3. Debian packaging files in `debian/`
-4. Built `.deb` package
-5. Comprehensive README with team member names
-6. Project report explaining implementation and showing screenshots
-
----
-
-## 🆘 Getting Help
-
-- Check [PUBLISHING_GUIDE.md](PUBLISHING_GUIDE.md) for detailed build and release instructions
-- Read [DEBIAN_PACKAGING.md](DEBIAN_PACKAGING.md) for packaging guidance
-- Review [PROJECT_TOPICS.md](PROJECT_TOPICS.md) for topic-specific requirements
-- Review the Troubleshooting section in the Publishing Guide
-- Ask your instructor or teaching assistants for help
-
----
-
-## 🎉 Happy packaging!
-
-Good luck with your project!
+* Bash: [https://www.gnu.org/software/bash/](https://www.gnu.org/software/bash/)
+* Ticko source: [GitHub Repository](https://github.com/CESA-UT/os-lab-1404-Ticko-TUI)
