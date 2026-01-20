@@ -52,6 +52,7 @@ source "$SCRIPT_DIR/tui.sh"
 ###########################################
 main() {
     # Load configuration
+    load_config "/etc/ticko.conf"
     load_config $DEFAULT_CONFIG_PATH
     
     # Parse command-line arguments
