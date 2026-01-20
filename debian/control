@@ -8,5 +8,5 @@ Standards-Version: 4.6.2
 Package: ticko
 Architecture: all
 Depends: ${misc:Depends}
-Description: Ticko: TUI-based TODO management CLI tool
+Description: TUI-based TODO management CLI tool
  This package contains a Bash-based command-line tool for managing TODOs.
