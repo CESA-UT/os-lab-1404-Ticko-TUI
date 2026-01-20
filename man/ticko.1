@@ -1,38 +1,196 @@
-.TH TICKO 1 "December 2025" "1.0" "Ticko Manual"
+.TH TICKO 1 "January 2026" "ticko 1.0" "User Commands"
 .SH NAME
-Ticko - A TUI-based TODO management tool
+ticko \- terminal-based TODO manager with CLI and TUI modes
 .SH SYNOPSIS
-.B mytool
-[\fIoptions\fR] [\fIarguments\fR]
+.B ticko
+.RI [ options ]
+.br
+.B ticko
+.I command
+.RI [ arguments ]
 .SH DESCRIPTION
-A sample Bash tool packaged as a Debian package.
-.PP
-IMPORTANT: Rename this file to match your tool name
-.PP
-Your team should replace this description with information about your actual tool.
-Include details about what the tool does, its purpose, and its main features.
+.B ticko
+is a terminal-based TODO and task management tool that provides both
+an interactive terminal user interface (TUI) and a command-line interface (CLI).
+
+When run without arguments,
+.B ticko
+starts in TUI mode. When invoked with a command, it operates in CLI mode
+to allow scripting and automation.
+
 .SH OPTIONS
 .TP
-.B \-h, \-\-help
-Display help message and exit
+.BR \-h ", " \-\-help
+Display a help message and exit.
 .TP
-.B \-v, \-\-version
-Display version information and exit
-.PP
-Add your actual command-line options here.
-.SH EXAMPLES
-.PP
-.B mytool
-.RS
-Run the tool with default options
-.RE
-.PP
-Add examples of how to use your tool here.
+.BR \-v ", " \-\-version
+Display version information and exit.
+.TP
+.BR \-f ", " \-\-file " " \fIPATH\fR
+Use a custom TODO data file instead of the default location.
+
+.SH COMMANDS
+.TP
+.B list
+List all TODO items.
+.TP
+.B list \-\-completed
+List only completed TODO items.
+.TP
+.B list \-\-pending
+List only pending TODO items.
+
+.TP
+.BI add\  TITLE
+Add a new TODO with the given title.
+.TP
+.BI add\  TITLE\  \-d\  DESCRIPTION
+Add a TODO with a description.
+.TP
+.BI add\  TITLE\  \-t\  DATETIME
+Add a TODO with a due date.
+The date format is
+.BR "YYYY-MM-DD HH:MM" .
+
+.TP
+.BI done\  ID
+Mark the TODO item with the given ID as completed.
+.TP
+.BI undone\  ID
+Mark the TODO item with the given ID as not completed.
+.TP
+.BI remove\  ID
+Remove the TODO item permanently.
+
+.TP
+.BI edit\  ID
+Edit an existing TODO.
+.TP
+.BI edit\  ID\  \-d\  DESCRIPTION
+Edit the description of a TODO.
+.TP
+.BI edit\  ID\  \-t\  DATETIME
+Edit the due date of a TODO.
+
+.SH CONFIGURATION
+.B ticko
+can be configured using a configuration file.
+Configuration values are typically shell-style key-value pairs.
+
+.TP
+.I /etc/ticko.conf
+System-wide configuration file. This file is read first, if present.
+.TP
+.I ~/.config/ticko/ticko.conf
+User-specific configuration file. Values defined here override system-wide
+settings.
+
+Common configuration options may include default data file paths,
+UI preferences, and behavior toggles.
+
+.SH ENVIRONMENT
+The following environment variables influence the behavior of
+.B ticko:
+
+.TP
+.B XDG_CONFIG_HOME
+If set, user configuration files are searched relative to this directory.
+Otherwise,
+.I ~/.config/
+is used.
+
+.SH TUI KEY BINDINGS
+
+.SS Navigation
+.TP
+.B j , Down
+Move selection down by one item.
+.TP
+.B k , Up
+Move selection up by one item.
+.TP
+.B g , Home
+Go to the first item.
+.TP
+.B G , End
+Go to the last item.
+.TP
+.B PageUp
+Scroll up by one page.
+.TP
+.B PageDown
+Scroll down by one page.
+.TP
+.B H
+Go to the first visible item on screen.
+.TP
+.B L
+Go to the last visible item on screen.
+
+.SS Actions
+.TP
+.B a , o
+Add a new TODO item.
+.TP
+.B x , Space
+Toggle completion state of the selected item.
+.TP
+.B D
+Delete the selected TODO item.
+.TP
+.B e
+Edit the description of the selected item.
+.TP
+.B d
+Set or edit the due date of the selected item.
+.TP
+.B t
+Edit the title of the selected item.
+
+.SS Search
+.TP
+.B /
+Start search mode.
+.TP
+.B n
+Jump to the next search result.
+.TP
+.B N
+Jump to the previous search result.
+
+.SS General
+.TP
+.B s
+Save all changes.
+.TP
+.B r
+Refresh the interface.
+.TP
+.B Enter
+Select or confirm the current action.
+.TP
+.B Escape
+Cancel the current action or close dialogs.
+.TP
+.B ?
+Show the help overlay.
+.TP
+.B q
+Quit the application.
+
 .SH FILES
 .TP
-.I /etc/mytool.conf
-Configuration
+.I /etc/ticko.conf
+System-wide configuration file.
+.TP
+.I ~/.config/ticko/
+User-specific configuration and data directory.
+
 .SH AUTHOR
-Team Member Names
+Mehrad Pooryoussof,
+Abolfazl Tavakolian,
+MohammadHossein MaarefVand,
+AmirHossein Nasrollahi.
+
 .SH SEE ALSO
-Add related commands or documentation references here.
+.BR bash (1)
