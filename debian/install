@@ -1,4 +1,4 @@
-src/ticko opt/
+src/ticko usr/lib/
 src/ticko.sh usr/bin/
 config/ticko.conf etc/
 man/ticko.1 usr/share/man/man1/
