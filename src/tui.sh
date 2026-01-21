@@ -648,7 +648,8 @@ _input_dialog() {
                 ;;
             "$KEY_ESCAPE")
                 _hide_cursor
-                echo -ne "${C_RESET}" _input_dialog_result=$default
+                echo -ne "${C_RESET}"
+                _input_dialog_result=$default
                 break
                 ;;
             "$KEY_BACKSPACE")
