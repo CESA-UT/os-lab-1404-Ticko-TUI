@@ -137,7 +137,7 @@ Screenshots
 ![Confirming Delete](screenshots/3.Confirming-Delete.png)
 
 **Searching in TUI**
-![CLI Listing](screenshots/5.Searching.png)
+![CLI Listing](screenshots/4.Searching.png)
 
 **Listing in CLI**
 ![CLI Listing](screenshots/5.Listing-in-CLI.png)
