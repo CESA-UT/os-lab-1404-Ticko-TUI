@@ -87,6 +87,7 @@ Actions:
   D                Delete current item
   e                Edit description
   d                Set due date
+  Enter            Show TODO details
 
 Search:
   /                Search

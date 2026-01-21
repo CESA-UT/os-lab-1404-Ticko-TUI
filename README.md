@@ -74,6 +74,7 @@ ticko
 * `e`: Edit description
 * `d`: Set/edit due date
 * `t`: Edit title
+* Enter: Show details
 
 **Search**
 

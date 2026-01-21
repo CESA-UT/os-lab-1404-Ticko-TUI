@@ -858,6 +858,145 @@ _confirm_dialog() {
     echo -ne "${C_RESET}"
 }
 
+###########################################
+# Show item details overlay
+###########################################
+_show_item_details_overlay() {
+    local id=$1
+
+    local idx=$(_find_index_by_id "$id")
+    local title desc due completed created
+    title="${TODO_TITLES[$idx]}"
+    desc="${TODO_DESCS[$idx]}"
+    due="${TODO_DUES[$idx]}"
+    completed="${TODO_COMPLETED[$idx]}"
+    created="${TODO_CREATED[$idx]}"
+
+    _get_term_size
+    
+    local overlay_width=$(( TERM_COLS * 3 / 4 ))
+    local overlay_width=$(( overlay_width>60?overlay_width:60 ))
+    
+    local max_line=$(( overlay_width - 9 ))
+    local -a detail_lines=()
+
+    detail_lines+=(
+        ""
+        "  Title"
+    )
+    local title_remaining
+    title_remaining="$title"
+    while (( ${#title_remaining} > 0 )); do
+        if (( ${#title_remaining} > max_line )); then
+            detail_lines+=("    > ${title_remaining::$max_line}")
+            title_remaining="${title_remaining:$max_line}"
+        else
+            detail_lines+=("    > $title_remaining")
+            title_remaining=""
+        fi
+    done
+    
+    if [[ -n "$desc" ]]; then
+        detail_lines+=(
+            ""
+            "  Description"
+        )
+        local desc_remaining
+        desc_remaining="$desc"
+        while (( ${#desc_remaining} > 0 )); do
+            if (( ${#desc_remaining} > max_line )); then
+                detail_lines+=("    > ${desc_remaining::$max_line}")
+                desc_remaining="${desc_remaining:$max_line}"
+            else
+                detail_lines+=("    > $desc_remaining")
+                desc_remaining=""
+            fi
+        done
+    fi
+    
+    
+    if [[ "$due" != "NULL" && -n "$due" ]]; then
+        detail_lines+=(
+            ""
+            "  Due Date"
+            "    > $due"
+        )
+    fi
+
+    detail_lines+=(
+        ""
+        "  Created At"
+        "    > $created"
+        ""
+    )
+    detail_lines+=(
+        "$(printf '%*s' $(( (overlay_width - 26) / 2 )) '' )Press any key to close"
+    )
+
+    local overlay_height=${#detail_lines[@]}
+    local start_row=$(( (TERM_ROWS - overlay_height) / 2 ))
+    local start_col=$(( (TERM_COLS - overlay_width) / 2 ))
+    
+    (( start_row < 1 )) && start_row=1
+    (( start_col < 1 )) && start_col=1
+
+    # Draw the box
+    _cursor_to "$start_row" "$start_col"
+    echo -ne "${C_BG_BLUE}${C_WHITE}${C_BOLD}"
+    echo -n "╭"
+    _draw_hline $(( overlay_width - 2 )) "─"
+    echo -n "╮"
+    
+    local row=$(( start_row + 1 ))
+    _cursor_to "$row" "$start_col"
+    echo -ne "│${C_BRIGHT_WHITE}"
+    printf "  %-*s" $(( overlay_width - 17 )) "TODO #$id"
+    if [[ "$completed" == "1" ]]; then
+        echo -ne "${C_BRIGHT_GREEN}COMPLETED ✓${C_WHITE}  "
+    else
+        if [[ "$due" != "NULL" && -n "$due" ]]; then
+            if is_overdue "$id" 2>/dev/null; then
+                echo -ne "    ${C_BRIGHT_RED}OVERDUE${C_WHITE}  "
+            else
+                echo -n "UNCOMPLETED  "
+            fi
+        else
+            echo -n "UNCOMPLETED  "
+        fi
+    fi
+    echo -n "│"
+    
+    (( row++ ))
+    _cursor_to "$row" "$start_col"
+    echo -n "├"
+    _draw_hline $(( overlay_width - 2 )) "─"
+    echo -n "┤"
+    
+    for line in "${detail_lines[@]}"; do
+        (( row++ ))
+        _cursor_to "$row" "$start_col"
+        echo -n "│"
+        if [[ "${line::6}" == "    > " ]]; then
+            echo -ne "${C_BRIGHT_WHITE}"
+        else
+            echo -ne "${C_WHITE}"
+        fi
+        printf " %-*s" $(( overlay_width - 3 )) "$line"
+        echo -ne "${C_WHITE}"
+        echo -n "│"
+    done
+    
+    (( row++ ))
+    _cursor_to "$row" "$start_col"
+    echo -n "╰"
+    _draw_hline $(( overlay_width - 2 )) "─"
+    echo -n "╯"
+    
+    echo -ne "${C_RESET}"
+    
+    # Wait for key
+    read_key >/dev/null 2>&1
+}
 
 ###########################################
 # Show help overlay
@@ -866,7 +1005,7 @@ _show_help_overlay() {
     _get_term_size
     
     local help_width=46
-    local help_height=22
+    local help_height=23
     local start_row=$(( (TERM_ROWS - help_height) / 2 ))
     local start_col=$(( (TERM_COLS - help_width) / 2 ))
     
@@ -907,6 +1046,7 @@ _show_help_overlay() {
         "    e             Edit description"
         "    t             Edit title"
         "    d             Set due date"
+        "    Enter         Show TODO details"
         ""
         "  OTHER"
         "    /             Search"
@@ -1160,6 +1300,13 @@ _action_search_prev() {
     fi
 }
 
+_action_select() {
+    local id
+    if id=$(_get_selected_id); then
+        _show_item_details_overlay "$id"
+    fi
+}
+
 _action_save() {
     if save_todos; then
         _show_message "Successfully saved to: $CURRENT_DATA_FILE" "success"
@@ -1328,6 +1475,10 @@ run_tui() {
                 (( TUI_SELECTED >= count )) && TUI_SELECTED=$(( count - 1 ))
                 (( TUI_SELECTED < 0 )) && TUI_SELECTED=0
                 _draw_list
+                ;;
+            SELECT)
+                _action_select
+                _redraw
                 ;;
             CANCEL)
                 TUI_SEARCH_QUERY=""
