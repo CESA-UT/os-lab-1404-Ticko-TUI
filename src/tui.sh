@@ -53,6 +53,15 @@ C_BG_MAGENTA="\033[45m"
 C_BG_CYAN="\033[46m"
 C_BG_WHITE="\033[47m"
 
+C_BRIGHT_BLACK="\033[90m"
+C_BRIGHT_RED="\033[91m"
+C_BRIGHT_GREEN="\033[92m"
+C_BRIGHT_YELLOW="\033[93m"
+C_BRIGHT_BLUE="\033[94m"
+C_BRIGHT_MAGENTA="\033[95m"
+C_BRIGHT_CYAN="\033[96m"
+C_BRIGHT_WHITE="\033[97m"
+
 ###########################################
 # Get terminal dimensions
 ###########################################
