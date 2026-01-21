@@ -8,6 +8,7 @@ terminal or automate workflows using scripts.
 
 Team Members
 ------------
+
 - Mehrad Pooryoussof
 - Abolfazl Tavakolian
 - MohammadHossein MaarefVand
@@ -55,41 +56,41 @@ Run `ticko` without arguments to start the interactive TUI:
 ticko
 ```
 
-**TUI Key Bindings**
+#### TUI Key Bindings
 
-**Navigation**
+##### Navigation
 
-* `j` / Down: Move down
-* `k` / Up: Move up
-* `g` / Home: Go to first item
-* `G` / End: Go to last item
-* PageUp / PageDown: Scroll by one page
-* `H` / `L`: Go to first/last visible item
+- `j` / Down: Move down
+- `k` / Up: Move up
+- `g` / Home: Go to first item
+- `G` / End: Go to last item
+- PageUp / PageDown: Scroll by one page
+- `H` / `L`: Go to first/last visible item
 
-**Actions**
+##### Actions
 
-* `a` / `o`: Add a new TODO
-* `x` / Space: Toggle completion
-* `D`: Delete selected TODO
-* `e`: Edit description
-* `d`: Set/edit due date
-* `t`: Edit title
-* Enter: Show details
+- `a` / `o`: Add a new TODO
+- `x` / Space: Toggle completion
+- `D`: Delete selected TODO
+- `e`: Edit description
+- `d`: Set/edit due date
+- `t`: Edit title
+- Enter: Show details
 
-**Search**
+##### Search
 
-* `/`: Start search
-* `n`: Next search result
-* `N`: Previous search result
+- `/`: Start search
+- `n`: Next search result
+- `N`: Previous search result
 
-**General**
+##### General
 
-* `s`: Save changes
-* `r`: Refresh
-* `Enter`: Confirm action
-* `Escape`: Cancel/close
-* `?`: Show help
-* `q`: Quit
+- `s`: Save changes
+- `r`: Refresh
+- Enter: Confirm action
+- Escape: Cancel/close
+- `?`: Show help
+- `q`: Quit
 
 ### CLI Mode
 
@@ -113,16 +114,18 @@ ticko edit ID -d "Desc"      # Edit description
 ticko edit ID -t "YYYY-MM-DD HH:MM"  # Edit due date
 ```
 
-## Configuration
+Configuration
+-------------
 
 Ticko supports system-wide and user-specific configuration files:
 
-* System-wide: `/etc/ticko.conf`
-* User-specific: `~/.config/ticko/ticko.conf`
+- System-wide: `/etc/ticko.conf`
+- User-specific: `~/.config/ticko/ticko.conf`
 
 The environment variable `XDG_CONFIG_HOME` can override the default config directory.
 
-## Screenshots
+Screenshots
+-----------
 
 **TUI Interface**
 ![TUI](screenshots/1.TUI.png)
@@ -139,11 +142,12 @@ The environment variable `XDG_CONFIG_HOME` can override the default config direc
 **Listing in CLI**
 ![CLI Listing](screenshots/5.Listing-in-CLI.png)
 
-## License
+License
+-------
 
 Ticko is released under the **MIT License**.
 
-```
+```license
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including the rights to use, copy, modify,
@@ -163,7 +167,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## References
+References
+----------
 
-* Bash: [https://www.gnu.org/software/bash/](https://www.gnu.org/software/bash/)
-* Ticko source: [GitHub Repository](https://github.com/CESA-UT/os-lab-1404-Ticko-TUI)
+- Bash: [https://www.gnu.org/software/bash/](https://www.gnu.org/software/bash/)
+- Ticko source: [GitHub Repository](https://github.com/CESA-UT/os-lab-1404-Ticko-TUI)
