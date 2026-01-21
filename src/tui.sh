@@ -314,7 +314,7 @@ _draw_todo_item() {
     local show_desc=$(( TERM_COLS > 80 && ${#desc} > 0 ))
     local prefix_len=10  # "│[✓] #123 "
     local due_len=${#due}
-    local suffix_len=$(( $due_len + 2 ))
+    local suffix_len=$(( due_len + 2 ))
     local title_max=$(( show_desc?20:(TERM_COLS - prefix_len - suffix_len) ))
     
     # Color based on status
@@ -347,7 +347,7 @@ _draw_todo_item() {
         fi
         
         if (( ${#desc} > desc_max )); then
-            title="${desc:0:desc_max-1}…"
+            desc="${desc:0:desc_max-1}…"
         fi
         
         printf "  %-${desc_max}s" "$desc"
