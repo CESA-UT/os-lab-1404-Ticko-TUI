@@ -27,7 +27,7 @@ read_key() {
     local timeout="${1:-}"
     local key=""
     local extra=""
-    
+
     # Read first character
     if [[ -n $timeout ]]; then
         IFS= read -rsn1 -t $timeout key 2>/dev/null || return 1
@@ -38,7 +38,7 @@ read_key() {
     else
         IFS= read -rsn1 key 2>/dev/null || return 1
     fi
-    
+
     # Handle escape sequences
     if [[ "$key" == $'\x1b' ]]; then
         # Check if there's more input (arrow keys, etc.)
@@ -52,10 +52,10 @@ read_key() {
                     D) echo "$KEY_LEFT"; return 0 ;;
                     H) echo "HOME"; return 0 ;;
                     F) echo "END"; return 0 ;;
-                    3) 
+                    3)
                         IFS= read -rsn1 _ 2>/dev/null  # consume ~
                         echo "DELETE"
-                        return 0 
+                        return 0
                         ;;
                     5)
                         IFS= read -rsn1 _ 2>/dev/null  # consume ~
@@ -80,7 +80,7 @@ read_key() {
         echo "$KEY_ESCAPE"
         return 0
     fi
-    
+
     # Handle special keys
     case "$key" in
         $'\n'|$'\r'|'')
@@ -96,7 +96,7 @@ read_key() {
             return 0
             ;;
     esac
-    
+
     # Regular character
     echo "$key"
     return 0
@@ -109,14 +109,14 @@ process_key() {
     local key="$1"
     local current_time
     current_time=$(date +%s)
-    
+
     # Check for multi-key timeout (500ms approximation)
     if (( current_time - LAST_KEY_TIME > 1 )); then
         LAST_KEY=""
     fi
-    
+
     local action=""
-    
+
     # Navigation keys
     case "$key" in
         j|"$KEY_DOWN")
@@ -135,7 +135,7 @@ process_key() {
             action="GOTO_LAST"
             LAST_KEY=""
             ;;
-        
+
         # Actions
         a|o)
             action="ADD"
@@ -161,7 +161,7 @@ process_key() {
             action="EDIT_TITLE"
             LAST_KEY=""
             ;;
-        
+
         # Search
         /)
             action="SEARCH"
@@ -175,7 +175,7 @@ process_key() {
             action="SEARCH_PREV"
             LAST_KEY=""
             ;;
-        
+
         # General
         s)
             action="SAVE"
@@ -197,7 +197,7 @@ process_key() {
             action="CANCEL"
             LAST_KEY=""
             ;;
-        
+
         # Page navigation
         PAGEUP)
             action="PAGE_UP"
@@ -228,17 +228,17 @@ process_key() {
             action="REFRESH"
             LAST_KEY=""
             ;;
-        
+
         *)
             # Unknown key
             action="NONE"
             LAST_KEY=""
             ;;
     esac
-    
+
     LAST_KEY="$key"
     LAST_KEY_TIME="$current_time"
-    
+
     echo "$action"
 }
 
@@ -249,18 +249,18 @@ read_input_line() {
     local prompt="$1"
     local default="${2:-}"
     local max_len="${3:-100}"
-    
+
     local input="$default"
     local cursor=${#input}
     local key
-    
+
     # Show prompt
     echo -n "$prompt"
     echo -n "$input"
-    
+
     while true; do
         key=$(read_key) || break
-        
+
         case "$key" in
             "$KEY_ENTER")
                 echo
@@ -326,6 +326,6 @@ read_input_line() {
                 ;;
         esac
     done
-    
+
     return 1
 }

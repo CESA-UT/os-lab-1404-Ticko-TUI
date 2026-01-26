@@ -145,7 +145,7 @@ _draw_centered() {
     if (( $len % 2 == 0 )); then
         additional_space=" "
     fi
-    
+
     printf "%*s%s%*s$additional_space" "$pad" "" "$text" "$pad" ""
 }
 
@@ -155,31 +155,31 @@ _draw_centered() {
 _draw_header() {
     local count
     count=$(get_todo_count)
-    
+
     _cursor_to 1 1
-    
+
     # Top line
     echo -ne "${C_CYAN}${C_BOLD}"
     echo -n "╭"
     _draw_hline $(( TERM_COLS - 2 )) "─"
     echo -n "╮"
     echo -ne "${C_RESET}"
-    
+
     # Title line
     _cursor_to 2 1
     echo -ne "${C_CYAN}${C_BOLD}│${C_RESET}"
-    
+
     local title=" ✓ TICKO - TODO Manager "
     local info="[$count items]"
     local title_len=${#title}
     local info_len=${#info}
     local space=$(( TERM_COLS - 2 - title_len - info_len ))
-    
+
     echo -ne "${C_BOLD}${C_YELLOW}$title${C_RESET}"
     printf "%*s" "$space" ""
     echo -ne "${C_DIM}$info${C_RESET}"
     echo -ne "${C_CYAN}${C_BOLD}│${C_RESET}"
-    
+
     # Bottom line
     _cursor_to 3 1
     echo -ne "${C_CYAN}${C_BOLD}"
@@ -194,7 +194,7 @@ _draw_header() {
 ###########################################
 _draw_footer() {
     local footer_row=$(( TERM_ROWS - FOOTER_LINES ))
-    
+
     # Separator line
     _cursor_to "$footer_row" 1
     echo -ne "${C_CYAN}${C_BOLD}"
@@ -202,19 +202,19 @@ _draw_footer() {
     _draw_hline $(( TERM_COLS - 2 )) "─"
     echo -n "┤"
     echo -ne "${C_RESET}"
-    
+
     # Help hints
     _cursor_to $(( footer_row + 1 )) 1
     echo -ne "${C_CYAN}${C_BOLD}│${C_RESET}"
-    
+
     local hints=" j/k:Move  a:Add  x:Done  e:Edit  s:Save  ?:Help  q:Quit "
     local hints_len=${#hints}
     local pad=$(( TERM_COLS - 2 - hints_len ))
-    
+
     echo -ne "${C_DIM}$hints${C_RESET}"
     printf "%*s" "$pad" ""
     echo -ne "${C_CYAN}${C_BOLD}│${C_RESET}"
-    
+
     # Bottom border
     _cursor_to $(( footer_row + 2 )) 1
     echo -ne "${C_CYAN}${C_BOLD}"
@@ -229,14 +229,14 @@ _draw_footer() {
 ###########################################
 _draw_status() {
     local status_row=$(( TERM_ROWS - FOOTER_LINES - STATUS_LINES ))
-    
+
     _cursor_to "$status_row" 1
     echo -ne "${C_CYAN}${C_BOLD}│${C_RESET}"
-    
+
     # Status message
     local msg=""
     local color="$C_RESET"
-    
+
     if [[ -n "$TUI_MESSAGE" ]]; then
         msg="$TUI_MESSAGE"
         case "$TUI_MESSAGE_TYPE" in
@@ -259,7 +259,7 @@ _draw_status() {
         msg="[Modified - press 's' to save]"
         color="${C_YELLOW}"
     fi
-    
+
     local msg_len=${#msg}
     if (( msg_len > TERM_COLS - 2 )); then
         local size=$(( (TERM_COLS - 3) / 2 ))
@@ -267,11 +267,11 @@ _draw_status() {
         msg_len=${#msg}
     fi
     local pad=$(( TERM_COLS - 2 - msg_len ))
-    
+
     echo -ne "${color}${msg}${C_RESET}"
     (( pad > 0 )) && printf "%*s" "$pad" ""
     echo -ne "${C_CYAN}${C_BOLD}│${C_RESET}"
-    
+
     # Clear message after showing
     TUI_MESSAGE=""
     TUI_MESSAGE_TYPE=""
@@ -284,37 +284,37 @@ _draw_todo_item() {
     local idx="$1"       # Position in display
     local id="$2"        # TODO ID
     local is_selected="$3"
-    
+
     local title desc due completed
     local item
     item=$(get_todo "$id")
     IFS='|' read -r title desc due completed <<< "$item"
-    
+
     local row=$(( HEADER_LINES + idx + 1 ))
     _cursor_to "$row" 1
-    
+
     # Left border
     echo -ne "${C_CYAN}${C_BOLD}│${C_RESET}"
-    
+
     # Selection indicator + checkbox
     if [[ "$is_selected" == "1" ]]; then
         echo -ne "${C_REVERSE}"
     fi
-    
+
     # Checkbox
     if [[ "$completed" == "1" ]]; then
         echo -ne "${C_GREEN}[✓]${C_RESET}"
     else
         echo -ne "${C_WHITE}[ ]${C_RESET}"
     fi
-    
+
     if [[ "$is_selected" == "1" ]]; then
         echo -ne "${C_REVERSE}"
     fi
-    
+
     # ID
     printf " ${C_DIM}#%-3s${C_RESET}" "$id"
-    
+
     if [[ "$is_selected" == "1" ]]; then
         echo -ne "${C_REVERSE}"
     fi
@@ -325,22 +325,22 @@ _draw_todo_item() {
     local due_len=${#due}
     local suffix_len=$(( due_len + 2 ))
     local title_max=$(( show_desc?20:(TERM_COLS - prefix_len - suffix_len) ))
-    
+
     # Color based on status
     if [[ "$completed" == "1" ]]; then
         echo -ne "${C_DIM}${C_STRIKETHROUGH}"
     elif is_overdue "$id" 2>/dev/null; then
         echo -ne "${C_RED}${C_BOLD}"
     fi
-    
+
     # Truncate title if needed
     if (( ${#title} > title_max )); then
         title="${title:0:title_max-1}…"
     fi
-    
+
     printf "%-${title_max}s" "$title"
     echo -ne "${C_RESET}"
-    
+
     if [[ "$is_selected" == "1" ]]; then
         echo -ne "${C_REVERSE}"
     fi
@@ -354,19 +354,19 @@ _draw_todo_item() {
         elif is_overdue "$id" 2>/dev/null; then
             echo -ne "${C_RED}${C_BOLD}"
         fi
-        
+
         if (( ${#desc} > desc_max )); then
             desc="${desc:0:desc_max-1}…"
         fi
-        
+
         printf "  %-${desc_max}s" "$desc"
         echo -ne "${C_RESET}"
-        
+
         if [[ "$is_selected" == "1" ]]; then
             echo -ne "${C_REVERSE}"
         fi
     fi
-    
+
     # Due date
     if [[ "$due" != "NULL" && -n "$due" ]]; then
         if is_overdue "$id" 2>/dev/null; then
@@ -386,9 +386,9 @@ _draw_todo_item() {
         fi
         printf " "
     fi
-    
+
     echo -ne "${C_RESET}"
-    
+
     # Right border
     echo -ne "${C_CYAN}${C_BOLD}│${C_RESET}"
 }
@@ -399,12 +399,12 @@ _draw_todo_item() {
 _draw_empty_list() {
     local visible=$(_visible_lines)
     local mid=$(( visible / 2 ))
-    
+
     for (( i=0; i<visible; i++ )); do
         local row=$(( HEADER_LINES + i + 1 ))
         _cursor_to "$row" 1
         echo -ne "${C_CYAN}${C_BOLD}│${C_RESET}"
-        
+
         if (( i == mid - 1 )); then
             local msg="No TODOs yet!"
             _draw_centered "$msg" $(( TERM_COLS - 2 ))
@@ -416,7 +416,7 @@ _draw_empty_list() {
         else
             printf "%*s" $(( TERM_COLS - 2 )) ""
         fi
-        
+
         echo -ne "${C_CYAN}${C_BOLD}│${C_RESET}"
     done
 }
@@ -433,7 +433,7 @@ _draw_list_items() {
     while IFS= read -r id_; do
         [[ -n "$id_" ]] && ids+=("$id_")
     done < <(get_all_todo_ids)
-    
+
     # Draw selected, first, last, and draw_quick(if any)
     _draw_todo_item "$(( TUI_SELECTED - TUI_SCROLL_OFFSET ))" "${ids[$TUI_SELECTED]}" "1"
     if [[ -n "$draw_quick" && "$draw_quick" -ne "$TUI_SELECTED" && "$draw_quick" -gt "$TUI_SCROLL_OFFSET" && "$draw_quick" -lt "$(( TUI_SCROLL_OFFSET + visible ))" ]]; then
@@ -449,7 +449,7 @@ _draw_list_items() {
     if [[ "$last_id" -ne "$TUI_SELECTED" && "$last_id" -ne "$TUI_SCROLL_OFFSET" ]]; then
         _draw_todo_item "$(( last_id - TUI_SCROLL_OFFSET ))" "${ids[$last_id]}" "0"
     fi
-    
+
     # Draw visible items
     local i
     for (( i=1; i<visible; i++ )); do
@@ -458,9 +458,9 @@ _draw_list_items() {
             continue
         fi
         local row=$(( HEADER_LINES + i + 1 ))
-        
+
         _cursor_to "$row" 1
-        
+
         if (( list_idx < count )); then
             local id="${ids[$list_idx]}"
             _draw_todo_item "$i" "$id" "0"
@@ -486,12 +486,12 @@ _draw_list() {
     local count
     count=$(get_todo_count)
     local visible=$(_visible_lines)
-    
+
     if (( count == 0 )); then
         _draw_empty_list
         return
     fi
-    
+
     # Adjust scroll offset
     if (( TUI_SELECTED < TUI_SCROLL_OFFSET )); then
         TUI_SCROLL_OFFSET=$TUI_SELECTED
@@ -538,7 +538,7 @@ _redraw() {
 _show_message() {
     local msg="$1"
     local type="${2:-info}"
-    
+
     TUI_MESSAGE="$msg"
     TUI_MESSAGE_TYPE="$type"
 }
@@ -549,16 +549,16 @@ _show_message() {
 _get_selected_id() {
     local count
     count=$(get_todo_count)
-    
+
     if (( count == 0 || TUI_SELECTED >= count )); then
         return 1
     fi
-    
+
     local ids=()
     while IFS= read -r id_; do
         [[ -n "$id_" ]] && ids+=("$id_")
     done < <(get_all_todo_ids)
-    
+
     echo "${ids[$TUI_SELECTED]}"
 }
 
@@ -571,45 +571,45 @@ _input_dialog() {
     local title="$1"
     local prompt="$2"
     local default="${3:-}"
-    
+
     _get_term_size
-    
+
     local dialog_width=60
     local dialog_height=5
     local start_row=$(( (TERM_ROWS - dialog_height) / 2 ))
     local start_col=$(( (TERM_COLS - dialog_width) / 2 ))
-    
+
     # Draw dialog box
     _cursor_to "$start_row" "$start_col"
     echo -ne "${C_BG_BLUE}${C_WHITE}${C_BOLD}"
     echo -n "╭"
     _draw_hline $(( dialog_width - 2 )) "─"
     echo -n "╮"
-    
+
     _cursor_to $(( start_row + 1 )) "$start_col"
     echo -n "│"
     printf " %-*s" $(( dialog_width - 3 )) "$title"
     echo -n "│"
-    
+
     _cursor_to $(( start_row + 2 )) "$start_col"
     echo -n "├"
     _draw_hline $(( dialog_width - 2 )) "─"
     echo -n "┤"
-    
+
     _cursor_to $(( start_row + 3 )) "$start_col"
     echo -n "│ "
     echo -ne "${C_RESET}${C_BG_BLUE}${C_WHITE}"
 
     _show_cursor
-    
+
     # Read input
     local input=""
     local cursor=0
     local max_input=$(( dialog_width - 5 ))
-    
+
     input="$default"
     cursor=${#input}
-    
+
     echo -n "$prompt"
 
     start_pos=0
@@ -631,10 +631,10 @@ _input_dialog() {
     _draw_hline $(( dialog_width - 2 )) "─"
     echo -n "╯"
     echo -ne "${C_RESET}"
-    
+
     # Position cursor
     _cursor_to $(( start_row + 3 )) "$cursor_col"
-    
+
     local key
     while true; do
         key=$(read_key) || break
@@ -680,7 +680,7 @@ _input_dialog() {
                 cursor="${#input}"
                 ;;
             *)
-                # && ${#input} -lt $max_input 
+                # && ${#input} -lt $max_input
                 if [[ ${#key} -eq 1 && "$key" =~ [[:print:]] ]]; then
                     input="${input:0:cursor}${key}${input:cursor}"
                     cursor=$(( $cursor + 1 ))
@@ -716,11 +716,11 @@ _input_dialog() {
         echo -n "$visible_input"
         printf "%*s" $(( max_input - ${#visible_input} - ${#prompt} + 2 )) ""
         echo -ne "${C_BOLD}│${C_RESET}"
-        
+
         # Position cursor
         _cursor_to $(( start_row + 3 )) "$cursor_col"
     done
-    
+
     _hide_cursor
     echo -ne "${C_RESET}"
 }
@@ -739,31 +739,31 @@ _confirm_dialog() {
     if [[ "$choice" != "Y" && "$choice" != "N" ]]; then
         choice="Y"
     fi
-    
+
     _get_term_size
-    
+
     local dialog_width=60
     local dialog_height=5
     local start_row=$(( (TERM_ROWS - dialog_height) / 2 ))
     local start_col=$(( (TERM_COLS - dialog_width) / 2 ))
-    
+
     # Draw dialog box
     _cursor_to "$start_row" "$start_col"
     echo -ne "${C_BG_BLUE}${C_WHITE}${C_BOLD}"
     echo -n "╭"
     _draw_hline $(( dialog_width - 2 )) "─"
     echo -n "╮"
-    
+
     _cursor_to $(( start_row + 1 )) "$start_col"
     echo -n "│"
     printf " %-*s" $(( dialog_width - 3 )) "$title"
     echo -n "│"
-    
+
     _cursor_to $(( start_row + 2 )) "$start_col"
     echo -n "├"
     _draw_hline $(( dialog_width - 2 )) "─"
     echo -n "┤"
-    
+
     _cursor_to $(( start_row + 3 )) "$start_col"
     echo -n "│ "
     echo -ne "${C_RESET}${C_BG_BLUE}${C_WHITE}"
@@ -772,18 +772,18 @@ _confirm_dialog() {
     echo -n "│"
     printf " %-*s" $(( dialog_width - 3 )) "$prompt"
     echo -n "│"
-    
+
     _cursor_to $(( start_row + 4 )) "$start_col"
     echo -n "├"
     _draw_hline $(( dialog_width - 2 )) "─"
     echo -n "┤"
-    
+
     _cursor_to $(( start_row + 5 )) "$start_col"
     echo -n "│ "
     echo -ne "${C_RESET}${C_BG_BLUE}${C_WHITE}${C_BOLD}"
 
     local max_input=$(( dialog_width - 5 ))
-    
+
     if [[ "$choice" == "Y" ]]; then
         echo -en "${C_REVERSE} Yes ${C_RESET}${C_BG_BLUE}${C_WHITE}${C_BOLD}"
     else
@@ -805,7 +805,7 @@ _confirm_dialog() {
 
     # Position cursor
     _cursor_to $(( start_row + 5 )) $(( start_col + 2 ))
-    
+
     local key
     while true; do
         key=$(read_key) || break
@@ -834,7 +834,7 @@ _confirm_dialog() {
                 break
                 ;;
         esac
-        
+
         # Redraw the buttons
         _cursor_to $(( start_row + 5 )) $(( $start_col ))
         echo -ne "${C_BG_BLUE}${C_WHITE}"
@@ -851,11 +851,11 @@ _confirm_dialog() {
             echo -n " No "
         fi
         echo -ne "${C_BOLD}│${C_RESET}"
-        
+
         # Position cursor
         _cursor_to $(( start_row + 5 )) $(( start_col + 2 ))
     done
-    
+
     echo -ne "${C_RESET}"
 }
 
@@ -874,10 +874,10 @@ _show_item_details_overlay() {
     created="${TODO_CREATED[$idx]}"
 
     _get_term_size
-    
+
     local overlay_width=$(( TERM_COLS * 3 / 4 ))
     local overlay_width=$(( overlay_width>60?overlay_width:60 ))
-    
+
     local max_line=$(( overlay_width - 9 ))
     local -a detail_lines=()
 
@@ -896,7 +896,7 @@ _show_item_details_overlay() {
             title_remaining=""
         fi
     done
-    
+
     if [[ -n "$desc" ]]; then
         detail_lines+=(
             ""
@@ -914,8 +914,8 @@ _show_item_details_overlay() {
             fi
         done
     fi
-    
-    
+
+
     if [[ "$due" != "NULL" && -n "$due" ]]; then
         detail_lines+=(
             ""
@@ -937,7 +937,7 @@ _show_item_details_overlay() {
     local overlay_height=${#detail_lines[@]}
     local start_row=$(( (TERM_ROWS - overlay_height) / 2 ))
     local start_col=$(( (TERM_COLS - overlay_width) / 2 ))
-    
+
     (( start_row < 1 )) && start_row=1
     (( start_col < 1 )) && start_col=1
 
@@ -947,7 +947,7 @@ _show_item_details_overlay() {
     echo -n "╭"
     _draw_hline $(( overlay_width - 2 )) "─"
     echo -n "╮"
-    
+
     local row=$(( start_row + 1 ))
     _cursor_to "$row" "$start_col"
     echo -ne "│${C_BRIGHT_WHITE}"
@@ -966,13 +966,13 @@ _show_item_details_overlay() {
         fi
     fi
     echo -n "│"
-    
+
     (( row++ ))
     _cursor_to "$row" "$start_col"
     echo -n "├"
     _draw_hline $(( overlay_width - 2 )) "─"
     echo -n "┤"
-    
+
     for line in "${detail_lines[@]}"; do
         (( row++ ))
         _cursor_to "$row" "$start_col"
@@ -986,15 +986,15 @@ _show_item_details_overlay() {
         echo -ne "${C_WHITE}"
         echo -n "│"
     done
-    
+
     (( row++ ))
     _cursor_to "$row" "$start_col"
     echo -n "╰"
     _draw_hline $(( overlay_width - 2 )) "─"
     echo -n "╯"
-    
+
     echo -ne "${C_RESET}"
-    
+
     # Wait for key
     read_key >/dev/null 2>&1
 }
@@ -1004,34 +1004,34 @@ _show_item_details_overlay() {
 ###########################################
 _show_help_overlay() {
     _get_term_size
-    
+
     local help_width=46
     local help_height=23
     local start_row=$(( (TERM_ROWS - help_height) / 2 ))
     local start_col=$(( (TERM_COLS - help_width) / 2 ))
-    
+
     (( start_row < 1 )) && start_row=1
     (( start_col < 1 )) && start_col=1
-    
+
     # Draw help box
     _cursor_to "$start_row" "$start_col"
     echo -ne "${C_BG_BLUE}${C_WHITE}${C_BOLD}"
     echo -n "╭"
     _draw_hline $(( help_width - 2 )) "─"
     echo -n "╮"
-    
+
     local row=$(( start_row + 1 ))
     _cursor_to "$row" "$start_col"
     echo -n "│"
     printf "  %-*s" $(( help_width - 4 )) "TICKO HELP"
     echo -n "│"
-    
+
     (( row++ ))
     _cursor_to "$row" "$start_col"
     echo -n "├"
     _draw_hline $(( help_width - 2 )) "─"
     echo -n "┤"
-    
+
     local -a help_lines=(
         ""
         "  NAVIGATION"
@@ -1058,7 +1058,7 @@ _show_help_overlay() {
         ""
         "          Press any key to close"
     )
-    
+
     for line in "${help_lines[@]}"; do
         (( row++ ))
         _cursor_to "$row" "$start_col"
@@ -1066,15 +1066,15 @@ _show_help_overlay() {
         printf " %-*s" $(( help_width - 3 )) "$line"
         echo -n "│"
     done
-    
+
     (( row++ ))
     _cursor_to "$row" "$start_col"
     echo -n "╰"
     _draw_hline $(( help_width - 2 )) "─"
     echo -n "╯"
-    
+
     echo -ne "${C_RESET}"
-    
+
     # Wait for key
     read_key >/dev/null 2>&1
 }
@@ -1146,7 +1146,7 @@ _action_delete() {
         if [[ "$_confirm_dialog_result" == "Y" ]]; then
             remove_todo "$id"
             _show_message "Deleted TODO #$id" "warning"
-            
+
             # Adjust selection
             local count
             count=$(get_todo_count)
@@ -1237,7 +1237,7 @@ _action_search() {
             TUI_SEARCH_QUERY="$query"
             TUI_SEARCH_RESULTS=()
             TUI_SEARCH_IDX=0
-            
+
             # Find matching items
             local ids=()
             while IFS= read -r id_; do
@@ -1269,7 +1269,7 @@ _action_search_next() {
     if (( TUI_SEARCH_IDX >= ${#TUI_SEARCH_RESULTS[@]} )); then
         TUI_SEARCH_IDX=0
     fi
-    
+
     # Find index of this ID
     local target_id="${TUI_SEARCH_RESULTS[$TUI_SEARCH_IDX]}"
     local ids=()
@@ -1293,7 +1293,7 @@ _action_search_prev() {
     if (( ${#TUI_SEARCH_RESULTS[@]} == 0 )); then
         return
     fi
-    
+
     TUI_SEARCH_IDX=$(( TUI_SEARCH_IDX - 2 ))
     _action_search_next
     if (( TUI_SEARCH_IDX <= 0 )); then
@@ -1364,28 +1364,28 @@ run_tui() {
     # Setup
     trap _cleanup EXIT
     trap _handle_resize SIGWINCH 2>/dev/null || true
-    
+
     _enter_alt_screen
     _hide_cursor
 
     # Load data
     local data_file="${CUSTOM_FILE:-$DEFAULT_DATA_PATH}"
     load_todos "$data_file"
-    
+
     TUI_RUNNING=1
     TUI_SELECTED=0
     TUI_SCROLL_OFFSET=0
-    
+
     _redraw
-    
+
     local i=1
     # Main loop
     while (( TUI_RUNNING )); do
         local key action draw_quick
-        
+
         key=$(read_key 0.1) || continue
         action=$(process_key "$key")
-        
+
         case "$action" in
             MOVE_DOWN)
                 draw_quick="$TUI_SELECTED"
@@ -1491,6 +1491,6 @@ run_tui() {
         _draw_status
         _cursor_to $(( TERM_ROWS - FOOTER_LINES - STATUS_LINES )) $TERM_COLS
     done
-    
+
     # Cleanup is handled by trap
 }

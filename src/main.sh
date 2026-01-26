@@ -54,10 +54,10 @@ main() {
     # Load configuration
     load_config "/etc/ticko.conf"
     load_config $DEFAULT_CONFIG_PATH
-    
+
     # Parse command-line arguments
     parse_args "$@"
-    
+
     # Dispatch based on mode
     case "$MODE" in
         tui)
