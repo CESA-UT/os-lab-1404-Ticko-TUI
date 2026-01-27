@@ -29,19 +29,19 @@ fi
 ############################
 
 print_error() {
-    echo -e "${RED}✖ $*${RESET}" >&2
+    echo -e "${RED}$*${RESET}" >&2
 }
 
 print_success() {
-    echo -e "${GREEN}✔ $*${RESET}"
+    echo -e "${GREEN}$*${RESET}"
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠ $*${RESET}"
+    echo -e "${YELLOW}$*${RESET}"
 }
 
 print_info() {
-    echo -e "${BLUE}ℹ $*${RESET}"
+    echo -e "${BLUE}$*${RESET}"
 }
 
 ############################

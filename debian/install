@@ -1,3 +1,4 @@
-src/ticko.sh usr/bin/
+src/ticko usr/bin/
+src/*.sh usr/lib/ticko/
 config/ticko.conf etc/
 man/ticko.1 usr/share/man/man1/
