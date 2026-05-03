@@ -1205,8 +1205,10 @@ _action_set_due() {
         local current_due
         current_due=$(get_todo_due "$id")
         [[ "$current_due" == "NULL" ]] && current_due=""
+        local default="$current_due"
+        [[ "$current_due" == "" ]] && default="$(date -d "+1 day" +%Y-%m-%d) 23:59"
         local new_due
-        _input_dialog "Set Due Date (YYYY-MM-DD HH:MM)" "" "$current_due"
+        _input_dialog "Set Due Date (YYYY-MM-DD HH:MM)" "" "$default"
         if new_due="$_input_dialog_result"; then
             if [[ -z "$new_due" ]]; then
                 if [[ -n "$current_due" && "$current_due" != "NULL" ]]; then
